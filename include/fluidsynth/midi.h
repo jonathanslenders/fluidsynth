@@ -122,6 +122,8 @@ enum fluid_player_status
 };
 
 FLUIDSYNTH_API fluid_player_t* new_fluid_player(fluid_synth_t* synth);
+FLUIDSYNTH_API fluid_player_t* new_fluid_player2(fluid_synth_t* synth, handle_midi_event_func_t user_callback, void* user_data);
+
 FLUIDSYNTH_API int delete_fluid_player(fluid_player_t* player);
 FLUIDSYNTH_API int fluid_player_add(fluid_player_t* player, const char *midifile);
 FLUIDSYNTH_API int fluid_player_play(fluid_player_t* player);

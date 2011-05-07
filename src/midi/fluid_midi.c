@@ -1076,6 +1076,10 @@ fluid_track_send_events(fluid_track_t* track,
 
 		track->ticks += event->dtime;
 
+               if (player && player->user_callback)
+                       (*player->user_callback)(player->user_data, event);
+
+
 		if (event->type != MIDI_SET_TEMPO)
 			fluid_synth_handle_midi_event (synth, event);
 		else if (player) fluid_player_set_midi_tempo (player, event->param1);
@@ -1131,6 +1135,30 @@ fluid_player_t* new_fluid_player(fluid_synth_t* synth)
 
 	return player;
 }
+
+
+/**
+ * Create a new MIDI player with optional callback function and user data.
+ * @param synth Fluid synthesizer instance to create player for
+ * @param user_callback A callback function to be fired as each midi event is passed to the synth, or NULL for no callback
+ * @param user_data Optional user data passed to the callback function, or NULL if no user data
+ * @return New MIDI player instance or NULL on error (out of memory)
+ */
+fluid_player_t* new_fluid_player2(fluid_synth_t* synth, handle_midi_event_func_t user_callback, void* user_data)
+{
+       fluid_player_t* player;
+
+       player = new_fluid_player(synth);
+       if (player) {
+               player->user_callback = user_callback;
+               player->user_data = user_data;
+       }
+
+       return player;
+}
+
+
+
 
 /**
  * Delete a MIDI player instance.
